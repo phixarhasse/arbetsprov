@@ -4,7 +4,7 @@ info:
   description: The public facing API of our internal addition service
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/
+  - url: https://localhost:8443/
     description: The server we need you to implement
 paths:
   /add:
