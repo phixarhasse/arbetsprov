@@ -4,7 +4,7 @@ info:
   description: The public facing API of our internal addition service
   version: 1.0.0
 servers:
-  - url: https://localhost:8443/
+  - url: https://localhost:8443
     description: The server we need you to implement
 paths:
   /add:
@@ -20,6 +20,7 @@ paths:
       parameters:
         - in: query
           name: syncResult
+          required: false
           schema:
             type: boolean
           description: Specifies if the result should be provided in the response
@@ -42,17 +43,14 @@ paths:
                 type: array
                 items:
                   allOf:
+                    - $ref: '#/components/schemas/AsyncId'
                     - $ref: '#/components/schemas/CalculationResult'
-                    - type: object
-                      properties:
-                        asyncId:
-                          type: string
-                          example: 56d583ed-3e70-4e44-b5ce-d011e5a34326
-                          description: The id of the requested calculation
-                      required:
-                        - asyncId
 components:
   schemas:
+    AsyncId:
+      type: string
+      example: 56d583ed-3e70-4e44-b5ce-d011e5a34326
+      description: The id of the requested calculation
     CalculationRequest:
       type: object
       properties:
@@ -69,12 +67,9 @@ components:
       type: object
       properties:
         asyncId:
-          type: string
-          example: 56d583ed-3e70-4e44-b5ce-d011e5a34326
-          description: The id of the requested calculation
-        syncResult:
-          type: object
-          example: Arthur Dent
+          $ref: '#/components/schemas/AsyncId'
+        result:
+          $ref: '#/components/schemas/CalculationResult'
       required:
         - asyncId
     CalculationResult:
