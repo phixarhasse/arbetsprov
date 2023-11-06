@@ -9,7 +9,7 @@ servers:
 paths:
   /add:
     post:
-      description: Can optionally respond synchronously with the calculated result
+      description: Can optionally respond synchronously with the calculated result from the internal Kafka topic
       requestBody:
         description: The specified calculation request
         required: true
@@ -33,7 +33,7 @@ paths:
                 $ref: '#/components/schemas/CalculationResponse'
   /list-results:
     get:
-      description: Responds with a list of all results
+      description: Responds with a list of all calculation results from the internal Kafka topic
       responses:
         '200':
           description: A JSON array of user names
