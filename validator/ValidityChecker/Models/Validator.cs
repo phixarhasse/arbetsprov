@@ -2,7 +2,7 @@
 
 internal interface IValidatable
 {
-    bool Check(); // this method holds the validation logic implemented by each class requiring validation
+    bool Check();
 }
 
 internal class Validator<T> where T : IValidatable

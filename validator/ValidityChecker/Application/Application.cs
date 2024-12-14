@@ -25,7 +25,7 @@ public class Application
         var validator = new Validator<Personnummer>();
         _logger.LogInfo($"Result from validating null: {validator.IsValid(null).ToString()}");
 
-        var personnummer = new Personnummer("123456-7890");
+        var personnummer = new Personnummer(_logger, "123456-7890");
         _logger.LogInfo($"Result from validating fake personnummer: {validator.IsValid(personnummer).ToString()}");
 
         personnummer.Nr = "19920223-4135";

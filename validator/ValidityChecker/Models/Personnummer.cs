@@ -1,11 +1,16 @@
-﻿namespace ValidityChecker.Models;
+﻿using ValidityChecker.Util;
+
+namespace ValidityChecker.Models;
 
 internal class Personnummer : IValidatable
 {
+    private readonly ILogger _logger;
+
     public string Nr { get; set; } = string.Empty;
 
-    public Personnummer(string nummer)
+    public Personnummer(ILogger logger, string nummer)
     {
+        _logger = logger;
         Nr = nummer;
     }
 
@@ -13,20 +18,20 @@ internal class Personnummer : IValidatable
     {
         if (string.IsNullOrEmpty(Nr))
         {
-            // TODO: logging
-            return false;
-        }
-
-        if (Nr.Length > 13 || Nr.Length < 12)
-        {
-            // TODO: logging
+            _logger.LogError("Personnummer is null or empty");
             return false;
         }
 
         var withoutHyphen = Nr.Replace("-", string.Empty);
+        if (withoutHyphen.Length != 12)
+        {
+            _logger.LogError("Personnummer has to be 12 digits");
+            return false;
+        }
+
         if (!withoutHyphen.All(char.IsDigit))
         {
-            // TODO: logging
+            _logger.LogError("Personnummer may only contain digits and hyphen");
             return false;
         }
 
@@ -58,7 +63,15 @@ internal class Personnummer : IValidatable
         // sum all results
         var sum = results.Sum();
         // if sum is divisible by 10, the personnummer is valid
-        return sum % 10 == 0;
+        if(sum % 10 == 0)
+        {
+            return true;
+        }
+        else
+        {
+            _logger.LogError("Personnummer failed Luhn algorithm verification");
+            return false;
+        }
     }
 }
 
