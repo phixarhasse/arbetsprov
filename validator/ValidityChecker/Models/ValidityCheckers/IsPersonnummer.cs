@@ -4,26 +4,24 @@ namespace ValidityChecker.Models.ValidityCheckers;
 internal class IsPersonnummer : IValidityCheck
 {
     private readonly ILogger _logger;
-    private readonly string _persNr;
 
-    public IsPersonnummer(ILogger logger, string persNr)
+    public IsPersonnummer(ILogger logger)
     {
         _logger = logger;
-        _persNr = persNr;
     }
 
-    public bool Check()
+    public bool Check(string? persNr)
     {
-        if (string.IsNullOrEmpty(_persNr))
+        if (string.IsNullOrEmpty(persNr))
         {
-            _logger.LogError("Personnummer is null or empty");
+            _logger.LogError("Personnummer cannot be null or empty");
             return false;
         }
 
-        var withoutHyphen = _persNr.Replace("-", string.Empty);
+        var withoutHyphen = persNr.Replace("-", string.Empty);
         if (withoutHyphen.Length != 12)
         {
-            _logger.LogError("Personnummer has to be 12 digits");
+            _logger.LogError("Personnummer has to have 12 digits");
             return false;
         }
 
@@ -33,13 +31,13 @@ internal class IsPersonnummer : IValidityCheck
             return false;
         }
 
-        return LuhnAlgorithmVerification();
+        return LuhnAlgorithmVerification(persNr);
     }
 
-    private bool LuhnAlgorithmVerification()
+    private bool LuhnAlgorithmVerification(string input)
     {
         // format
-        var shortened = _persNr.Substring(2, _persNr.Length - 2).Replace("-", string.Empty);
+        var shortened = input.Substring(2, input.Length - 2).Replace("-", string.Empty);
         // split
         var digits = shortened.ToCharArray();
 
