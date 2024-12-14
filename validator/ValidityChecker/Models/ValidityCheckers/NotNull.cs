@@ -6,7 +6,7 @@ internal class NotNull : IValidityCheck
     private readonly ILogger _logger;
     private readonly object _value;
 
-    public NotNull(ILogger logger, string value)
+    public NotNull(ILogger logger, object value)
     {
         _logger = logger;
         _value = value;
