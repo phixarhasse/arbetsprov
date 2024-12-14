@@ -2,13 +2,12 @@
 
 internal interface IValidatable
 {
-    bool Check();
+    bool Check(); // this method holds the validation logic implemented by each class requiring validation
 }
 
 internal class Validator<T> where T : IValidatable
 {
-    // this solution is not ideal because it throws an exception if the object does not implement IValidatable i.e. won't work for primitive types
-    public bool IsValid(T obj)
+    public bool IsValid(T? obj)
     {
         if (!(obj is IValidatable))
         {
