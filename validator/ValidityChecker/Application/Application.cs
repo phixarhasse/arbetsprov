@@ -1,4 +1,5 @@
-﻿using ValidityChecker.Util;
+﻿using ValidityChecker.Models;
+using ValidityChecker.Util;
 
 namespace ValidityChecker.Application;
 
@@ -20,7 +21,15 @@ public class Application
     {
         _logger.LogInfo("Application started");
 
-        Console.WriteLine("Hello, World!");
+        // Validating null and Personnummer
+        var validator = new Validator<Personnummer>();
+        _logger.LogInfo($"Result from validating null: {validator.IsValid(null).ToString()}");
+
+        var personnummer = new Personnummer("123456-7890");
+        _logger.LogInfo($"Result from validating fake personnummer: {validator.IsValid(personnummer).ToString()}");
+
+        personnummer.Nr = "19920223-4135";
+        _logger.LogInfo($"Result from validating real personnummer: {validator.IsValid(personnummer).ToString()}");
 
         _logger.LogInfo("Application finished");
     }
