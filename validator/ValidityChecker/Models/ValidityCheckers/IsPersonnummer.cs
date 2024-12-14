@@ -36,15 +36,15 @@ internal class IsPersonnummer : IValidityCheck
 
     private bool LuhnAlgorithmVerification(string input)
     {
-        // format
-        var shortened = input.Substring(2, input.Length - 2).Replace("-", string.Empty);
-        // split
-        var digits = shortened.ToCharArray();
+        // format input, ignore first two, save last digit
+        var digits = input.Substring(2, input.Length - 2).Replace("-", string.Empty).ToCharArray();
+        var controlDigit = int.Parse(digits.Last().ToString());
+        digits = digits.Take(digits.Length - 1).ToArray();
 
         // calculate each digit's result
         // original algorithm calls for starting from the right
-        int multiplier = 1;
-        int[] results = new int[digits.Length];
+        int multiplier = 2;
+        List<int> results = [];
         foreach (var digit in digits.Reverse())
         {
             var result = int.Parse(digit.ToString()) * multiplier;
@@ -52,14 +52,17 @@ internal class IsPersonnummer : IValidityCheck
             {
                 result = 1 + (result % 10); // add the two digits together
             }
-            results.Append(result);
+            results.Add(result);
             multiplier = multiplier == 1 ? 2 : 1;
         }
 
         // sum all results
         var sum = results.Sum();
-        // if sum is divisible by 10, the personnummer is valid
-        if (sum % 10 == 0)
+
+        // calculate control digit
+        var calculatedControlDigit = (10 - (sum % 10)) % 10;
+
+        if (calculatedControlDigit == controlDigit)
         {
             return true;
         }
