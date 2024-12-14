@@ -1,4 +1,5 @@
 ﻿using ValidityChecker.Models;
+using ValidityChecker.Models.ValidityCheckers;
 using ValidityChecker.Util;
 
 namespace ValidityChecker.Application;
@@ -21,15 +22,24 @@ public class Application
     {
         _logger.LogInfo("Application started");
 
-        // Validating null and Personnummer
-        var validator = new Validator<Personnummer>();
-        _logger.LogInfo($"Result from validating null: {validator.IsValid(null).ToString()}");
+        var notNull = new NotNull(_logger);
+        var isPersonnummer = new IsPersonnummer(_logger);
 
-        var personnummer = new Personnummer(_logger, "123456-7890");
-        _logger.LogInfo($"Result from validating fake personnummer: {validator.IsValid(personnummer).ToString()}");
+        // Run null validity checker
+        _logger.LogInfo($"Result from null validating null: {notNull.Check(null)}");
+        _logger.LogInfo($"Result from null validating object: {notNull.Check("test")}");
+
+        // Run personnummer validity checker
+        _logger.LogInfo($"Result from validating null personnummer: {isPersonnummer.Check(null)}");
+
+        var personnummer = new Personnummer("1234567890-7890");
+        _logger.LogInfo($"Result from validating too long personnummer: {isPersonnummer.Check(personnummer.Nr)}");
+
+        personnummer.Nr = "19922023-4135";
+        _logger.LogInfo($"Result from validating wrong personnummer: {isPersonnummer.Check(personnummer.Nr)}");
 
         personnummer.Nr = "19920223-4135";
-        _logger.LogInfo($"Result from validating real personnummer: {validator.IsValid(personnummer).ToString()}");
+        _logger.LogInfo($"Result from validating real personnummer: {isPersonnummer.Check(personnummer.Nr)}");
 
         _logger.LogInfo("Application finished");
     }
