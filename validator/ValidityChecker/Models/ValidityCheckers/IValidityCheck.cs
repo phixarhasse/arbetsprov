@@ -2,5 +2,5 @@
 
 internal interface IValidityCheck
 {
-    bool Check();
+    bool Check(string? input);
 }
