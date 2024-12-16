@@ -27,6 +27,7 @@ internal class IsValidLicensePlate : IValidityCheck
         }
 
         // Swedish license plate format, excluded letters in standard plates are I, V, Q, Å, Ä, Ö
+        // credit to https://github.com/jop-io/js-regex
         string pattern = @"^[A-HJ-PR-UW-Z]{3}[0-9]{2}[A-HJ-PR-UW-Z0-9]{1}$";
         if (!Regex.IsMatch(input, pattern))
         {
