@@ -38,10 +38,10 @@ public class Application
         var personnummer = "1234567890-7890";
         _logger.LogInfo($"Result from validating too long personnummer: {isPersonnummer.Check(personnummer)}");
 
-        personnummer = "19922023-4135";
+        personnummer = "";
         _logger.LogInfo($"Result from validating wrong personnummer: {isPersonnummer.Check(personnummer)}");
 
-        personnummer = "19920223-4135";
+        personnummer = "";
         _logger.LogInfo($"Result from validating real personnummer: {isPersonnummer.Check(personnummer)}");
         _logger.LogInfo("=========================================");
 
